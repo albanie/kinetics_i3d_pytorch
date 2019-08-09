@@ -285,15 +285,15 @@ class I3D(torch.nn.Module):
         out = self.maxPool3d_5a_2x2(out)
         out = self.mixed_5b(out)
         out = self.mixed_5c(out)
-        out = self.avg_pool(out)
-        out = self.dropout(out)
+        avg_pool = self.avg_pool(out)
+        out = self.dropout(avg_pool)
         out = self.conv3d_0c_1x1(out)
         out = out.squeeze(3)
         out = out.squeeze(3)
         out = out.mean(2)
         out_logits = out
         out = self.softmax(out_logits)
-        return out, out_logits
+        return out, out_logits, avg_pool
 
     def load_tf_weights(self, sess):
         state_dict = {}
